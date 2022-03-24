@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Llistat de comptes{% endblock %}
+{% block body %}
+        <h1>Llistat de comptes</h1>
+        <a href="{{ path('compte_new') }}">+ Nou compte</a>
+    <form action="{{ path('compte_order') }}" method="post">
+        <select name="ordre">
+            <option value="1">Codi-ASC</option>
+            <option value="2">Codi-DESC</option>
+            <option value="3">Saldo-ASC</option>
+            <option value="4">Saldo-DESC</option>
+        </select>
+        <button>Filtra</button>
+    </form>
+
+
+        {% for message in app.flashes('notice') %}
+              <strong>Success!</strong> {{ message }}
+        {% endfor %}
+
+          <table style="margin-top: 20px;margin-bottom: 10px;">
+              <thead>
+                  <tr>
+                      <th>Codi</th><th>Saldo</th><th>Clients</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for compte in comptes %}
+                      <tr>
+                          <td>{{ compte.codi }}</td><td>{{ compte.saldo }}</td><!--td>{{ compte.clients|length }}</td-->
+                          <td>
+                            {% for client in compte.clients %}
+                              {{ client.nomCognoms }}<br>
+                            {% endfor %}
+                          </td>
+                          <td>
+                            <a href="{{ path('compte_edit', {'id': compte.id}) }}">Editar</a>
+                            <a href="{{ path('compte_delete', {'id': compte.id}) }}">Eliminar</a>
+                          </td>
+                      </tr>
+                  {% else %}
+                      <tr>
+                          <td colspan="5">No hi ha comptes.</td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+
+          <br>
+
+{% endblock %}
